@@ -1,0 +1,11 @@
+stages:
+  train:
+    cmd: python src/model.py data/processed.csv
+    deps:
+      - data/processed.csv
+      - src/model.py
+    outs:
+      - models/model.pkl
+    metrics:
+      - metrics.json:
+          cache: false  # Add this if metrics.json shouldn't be cached

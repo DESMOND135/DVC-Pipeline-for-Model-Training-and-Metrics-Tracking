@@ -1,0 +1,90 @@
+schema: '2.0'
+stages:
+  load:
+    cmd: python src/data_loader.py TRAIN.csv
+    deps:
+    - path: TRAIN.csv
+      hash: md5
+      md5: 6a341197bc9aee02573cab9d1cf52bcd
+      size: 183481
+    - path: src/data_loader.py
+      hash: md5
+      md5: 2504a4bfd69ff1ecfb531d9dc7e6046d
+      size: 602
+    outs:
+    - path: data/raw.csv
+      hash: md5
+      md5: f0f2ad8ed8eb342fd191e8a2b8ff27a3
+      size: 187015
+  preprocess:
+    cmd: python src/preprocessing.py data/raw_copy.csv
+    deps:
+    - path: data/raw_copy.csv
+      hash: md5
+      md5: f0f2ad8ed8eb342fd191e8a2b8ff27a3
+      size: 187015
+    - path: src/preprocessing.py
+      hash: md5
+      md5: 772b6cc28b0be963b3f8468bf2e80b74
+      size: 588
+    outs:
+    - path: data/processed.csv
+      hash: md5
+      md5: bd77abfbf3af8a68616c0cf7e76c514d
+      size: 221495
+  train:
+    cmd: python src/model.py data/processed.csv
+    deps:
+    - path: data/processed.csv
+      hash: md5
+      md5: bd77abfbf3af8a68616c0cf7e76c514d
+      size: 221495
+    - path: src/model.py
+      hash: md5
+      md5: 14c091a8c92d8766a4b35dc362700240
+      size: 1130
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: cf6b6a20c1bd7cc6bc06126b86e1689c
+      size: 53
+    - path: models/model.pkl
+      hash: md5
+      md5: 23b2d667285cfcb558aafd5451f67319
+      size: 697
+  predict:
+    cmd: python src/predict.py data/raw.csv models/model.pkl
+    deps:
+    - path: data/raw.csv
+      hash: md5
+      md5: f0f2ad8ed8eb342fd191e8a2b8ff27a3
+      size: 187015
+    - path: models/model.pkl
+      hash: md5
+      md5: 23b2d667285cfcb558aafd5451f67319
+      size: 697
+    - path: src/predict.py
+      hash: md5
+      md5: bb9aa44d16acc2a15b89a3e5263e037e
+      size: 1723
+    outs:
+    - path: data/predictions.csv
+      hash: md5
+      md5: f45e81b6f35fdbf57fb046f6f8fdd295
+      size: 253691
+  data_loader:
+    cmd: python src/data_loader.py data/raw.csv
+    deps:
+    - path: data/raw.csv
+      hash: md5
+      md5: f0f2ad8ed8eb342fd191e8a2b8ff27a3
+      size: 187015
+    - path: src/data_loader.py
+      hash: md5
+      md5: ea9dd07f82c4df419f9decfd1ddf60e9
+      size: 530
+    outs:
+    - path: data/raw_copy.csv
+      hash: md5
+      md5: f0f2ad8ed8eb342fd191e8a2b8ff27a3
+      size: 187015
